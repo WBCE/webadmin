@@ -179,12 +179,12 @@ $editrows = 25;
 /* Permission of created directories:
  * For example: 0705 would be 'drwx---r-x'.
  */
-$dirpermission = 0777;
+$dirpermission = STRING_DIR_MODE;
  
 /* Permission of created files:
  * For example: 0604 would be '-rw----r--'.
  */
-$filepermission = 0666;
+$filepermission = STRING_FILE_MODE;
  
 /* Filenames related to the apache web server:
  */
