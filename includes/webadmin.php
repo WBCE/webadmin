@@ -23,8 +23,16 @@
  * forward buttons! Always open files in a new browser tab!
  * -------------------------------------------------------------------------
  *
- * This is Version 0.9.14 (adapted for Websitebaker CE)
+ * This is Version 0.9.15 (adapted for WBCE)
  * =========================================================================
+ *
+ *
+ *
+ *
+ * Changes of revision 15
+ * [florian]
+ *    Replace broken image loader by font awesome icons, update readme, change module version to rev version.
+ *
  *
  * Changes of revision 14
  * [norbert at heimsath dot org]
@@ -419,7 +427,7 @@ case 'create_directory':
   if (@file_exists($file)) {
     listing_page(error('already_exists', $file));
   } else {
-    $old = @umask(0777 & ~$dirpermission);
+    $old = @umask(0755 & ~$dirpermission);
     if (@mkdir($file, $dirpermission)) {
       listing_page(notice('created', $file));
     } else {
@@ -435,7 +443,7 @@ case 'create_file':
   if (@file_exists($file)) {
     listing_page(error('already_exists', $file));
   } else {
-    $old = @umask(0777 & ~$filepermission);
+    $old = @umask(0644 & ~$filepermission);
     if (@touch($file)) {
       edit($file);
     } else {
@@ -1286,7 +1294,7 @@ function listing ($list) {
   global $directory, $homedir, $sort, $reverse, $win, $cols, $date_format, $self;
  
   echo '<tr class="listing">
-  <th style="text-align: center; vertical-ailgn: middle"><img src="' . $self . WEBADMIN_QAND.'image=smiley" alt="smiley" /></th>
+  <th style="text-align: center; vertical-ailgn: middle">&nbsp;</th>
 ';
  
   column_title('filename', $sort, $reverse);
@@ -1315,7 +1323,7 @@ function listing ($list) {
  
     if ($file['is_link']) {
  
-      echo '<img src="' . $self . WEBADMIN_QAND.'image=link" alt="link" /> ';
+      echo '<span class="fa fa-fw fa-external-link"></span> ';
       echo html($file['filename']) . ' &rarr; ';
  
       $real_file = relative2absolute($file['target'], $directory);
@@ -1332,7 +1340,7 @@ function listing ($list) {
  
     } elseif ($file['is_dir']) {
  
-      echo '<img src="' . $self . WEBADMIN_QAND.'image=folder" alt="folder" /> [ ';
+      echo '<span class="fa fa-fw fa-folder-o"></span> [ ';
       if ($win || $file['is_executable']) {
         echo '<a href="' . $self . WEBADMIN_QAND.'dir=' . urlencode($file['path']) . '">' . html($file['filename']) . '</a>';
       } else {
@@ -1343,9 +1351,9 @@ function listing ($list) {
     } else {
  
       if (substr($file['filename'], 0, 1) == '.') {
-        echo '<img src="' . $self . WEBADMIN_QAND.'image=hidden_file" alt="hidden file" /> ';
+        echo '<span class="fa fa-fw fa-file-code-o"></span> ';
       } else {
-        echo '<img src="' . $self . WEBADMIN_QAND.'image=file" alt="file" /> ';
+        echo '<span class="fa fa-fw fa-file-o"></span> ';
       }
  
       if ($file['is_file'] && $file['is_readable']) {
@@ -1436,7 +1444,7 @@ function listing ($list) {
   }
  
   echo '<tr class="listing_footer">
-  <td style="text-align: right; vertical-align: top"><img src="' . $self . WEBADMIN_QAND.'image=arrow" alt="&gt;" /></td>
+  <td style="text-align: right; vertical-align: top"><span class="fa fa-fw fa-arrow-right"></span></td>
   <td colspan="' . ($cols - 1) . '">
     <input type="hidden" name="num" value="' . sizeof($list) . '" />
     <input type="hidden" name="focus" value="" />
@@ -1661,7 +1669,7 @@ function phrase ($phrase, $arguments) {
  
   if (!is_array($search)) for ($i = 1; $i <= 8; $i++) $search[] = "%$i";
  
-  for ($i = 0; $i < sizeof($arguments); $i++) {
+  for ($i = 0; $i < @sizeof($arguments); $i++) {
     $arguments[$i] = nl2br(html($arguments[$i]));
   }
  
@@ -2605,7 +2613,7 @@ function getwords ($lang) {
 }
  
 function getimage ($image) {
-  switch ($image) {
+ /* switch ($image) {
   case 'file':
     return base64_decode('R0lGODlhEQANAJEDAJmZmf///wAAAP///yH5BAHoAwMALAAAAAARAA0AAAItnIGJxg0B42rsiSvCA/REmXQWhmnih3LUSGaqg35vFbSXucbSabunjnMohq8CADsA');
   case 'folder':
@@ -2618,21 +2626,22 @@ function getimage ($image) {
     return base64_decode('R0lGODlhEQANAJECAAAAAP//AP///wAAACH5BAHoAwIALAAAAAARAA0AAAIslI+pAu2wDAiz0jWD3hqmBzZf1VCleJQch0rkdnppB3dKZuIygrMRE/oJDwUAOwA=');
   case 'arrow':
     return base64_decode('R0lGODlhEQANAIABAAAAAP///yH5BAEKAAEALAAAAAARAA0AAAIdjA9wy6gNQ4pwUmav0yvn+hhJiI3mCJ6otrIkxxQAOw==');
-  }
+  } */
+  return '';
 }
  
 function html_header () {
   global $site_charset;
- 
+  $wburl = WB_URL;
   echo <<<END
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
- 
+<title>webadmin.php</title> 
 <meta http-equiv="Content-Type" content="text/html; charset=$site_charset" />
  
-<title>webadmin.php</title>
+<link rel="stylesheet" type="text/css" href="$wburl/include/font-awesome/css/font-awesome.min.css" />
  
 <style type="text/css">
 body { font: small sans-serif; text-align: center }
