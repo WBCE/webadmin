@@ -32,6 +32,9 @@
  * Changes of revision 15
  * [florian]
  *    Replace broken image loader by font awesome icons, update readme, change module version to rev version.
+  Changes of revision 15
+ * [florian]
+ *    Remove deprecated magic quotes stuff 
  *
  *
  * Changes of revision 14
@@ -210,13 +213,13 @@ $backlink= $returnToTools;
 $backtext= $HEADING['ADMINISTRATION_TOOLS'];
 
 /* ------------------------------------------------------------------------- */
- 
+ /* deprecated
 if (get_magic_quotes_gpc()) {
   array_walk($_GET, 'strip');
   array_walk($_POST, 'strip');
   array_walk($_REQUEST, 'strip');
 }
- 
+ */
 if (array_key_exists('image', $_GET)) {
   header('Content-Type: image/gif');
   die(getimage($_GET['image']));
